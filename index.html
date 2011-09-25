@@ -1,0 +1,49 @@
+<html>
+  <head>
+    <script src="jquery-1.6.4.js"></script>
+    <script src="underscore.js"></script>
+    <script>
+      (function() {
+        var templateLoader = {
+          templates: {},
+          loadRemoteTemplate: function(templateName, filename, callback) {
+            if (!this.templates[templateName]) {
+              var self = this;
+              jQuery.get(filename, function(data) {
+                self.addTemplate(templateName, data);
+                callback(data);
+              });
+            }
+            else {
+              callback(this.templates[templateName]);
+            }
+          },
+          
+          addTemplate: function(templateName, data) {
+            this.templates[templateName] = data;
+          }
+        };
+        
+        window.templateLoader = templateLoader;
+      })();
+      
+      $(document).ready(function() {
+        $('#load_remote_template').click(function() {
+          templateLoader.loadRemoteTemplate("test_template", "templates/test_template.txt", function(data) {
+            var compiled = _.template(data);
+            $('#content').html(compiled({name : 'world'}));
+          });
+        });
+      });
+      
+      
+    </script>
+  </head>
+  
+  <body>
+    <span id="load_remote_template">Load Remote Template</span>
+    <div id="content"></div>
+  </body>
+
+
+</html>
