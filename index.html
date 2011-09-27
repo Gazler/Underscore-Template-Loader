@@ -13,7 +13,7 @@
               jQuery.get(filename, function(data) {
                 self.addTemplate(templateName, data);
                 self.saveLocalTemplates();
-                setTimeout(function() {callback(data)}, 2000);
+                callback(data);
               });
             }
             else {
